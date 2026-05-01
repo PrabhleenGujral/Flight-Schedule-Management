@@ -81,7 +81,7 @@ flight-schedule-manager/
 
 - React
 - react-window
-- (Optional) Material UI or your preferred component library
+- Material UI library
 
 ---
 
