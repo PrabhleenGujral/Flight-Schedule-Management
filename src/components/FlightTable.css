@@ -1,0 +1,594 @@
+/* =========================================================
+   FlightTable.css — Flight Schedule Management
+   Dark, modern ops dashboard aesthetic
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── CSS Variables ─────────────────────────────────────── */
+:root {
+  --bg-page:        #0a0a0c;
+  --bg-surface:     #111114;
+  --bg-surface2:    #18181d;
+  --bg-row-hover:   rgba(255,255,255,0.03);
+  --bg-editing:     rgba(77,184,255,0.05);
+  --bg-header:      #18181d;
+
+  --border-base:    rgba(255,255,255,0.07);
+  --border-focus:   rgba(77,184,255,0.5);
+
+  --text-primary:   #f0f0f4;
+  --text-secondary: #a0a0b0;
+  --text-muted:     #5a5a6e;
+
+  --accent-blue:    #4db8ff;
+  --accent-green:   #2ecc8a;
+  --accent-red:     #ff5a5a;
+  --accent-amber:   #f59e0b;
+
+  --radius-sm:      5px;
+  --radius-md:      8px;
+  --radius-lg:      14px;
+
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:      0 4px 20px rgba(0,0,0,0.4);
+
+  --font-ui:        'Syne', system-ui, sans-serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Grid column widths */
+  --col-check:      36px;
+  --col-id:         70px;
+  --col-aoc:        52px;
+  --col-flight:     76px;
+  --col-origin:     1fr;
+  --col-dest:       1fr;
+  --col-std:        58px;
+  --col-sta:        58px;
+  --col-days:       1fr;
+  --col-body:       88px;
+  --col-start:      96px;
+  --col-end:        96px;
+  --col-status:     96px;
+  --col-actions:    128px;
+}
+
+/* ─── Base Reset ────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Outer Container ───────────────────────────────────── */
+.flight-table-container {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-base);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* subtle top shimmer line */
+.flight-table-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77,184,255,0.18), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ─── Filter Toolbar ────────────────────────────────────── */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg-surface2);
+  border-bottom: 1px solid var(--border-base);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-group input {
+  min-width: 220px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%235a5a6e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  padding-left: 32px !important;
+}
+
+.date-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-group input {
+  width: 130px;
+}
+
+.date-separator {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Inputs & Selects in Toolbar */
+.filter-toolbar input,
+.filter-toolbar select {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-md);
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  height: 34px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filter-toolbar select {
+  padding-right: 28px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="%235a5a6e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+}
+
+.filter-toolbar select option {
+  background: #18181d;
+  color: var(--text-primary);
+}
+
+.filter-toolbar input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-toolbar input:focus,
+.filter-toolbar select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(77,184,255,0.1);
+}
+
+/* date input calendar icon color hack */
+.filter-toolbar input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+/* Clear Button */
+.btn-clear {
+  margin-left: auto;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+  height: 34px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.btn-clear:hover {
+  background: rgba(255,90,90,0.08);
+  color: var(--accent-red);
+  border-color: rgba(255,90,90,0.25);
+}
+
+/* ─── Grid Layout ───────────────────────────────────────── */
+.flight-header,
+.flight-row {
+  display: grid;
+  grid-template-columns:
+    var(--col-check)
+    var(--col-id)
+    var(--col-aoc)
+    var(--col-flight)
+    var(--col-origin)
+    var(--col-dest)
+    var(--col-std)
+    var(--col-sta)
+    var(--col-days)
+    var(--col-body)
+    var(--col-start)
+    var(--col-end)
+    var(--col-status)
+    var(--col-actions);
+  align-items: center;
+  width: 100%;
+  min-width: 860px;
+}
+
+/* ─── Scrollable Body ───────────────────────────────────── */
+.flight-body {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 220px);
+}
+
+/* ─── Sticky Header ─────────────────────────────────────── */
+.flight-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-base);
+  padding: 0 16px;
+  height: 38px;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.flight-header > div {
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flight-header > div:last-child {
+  text-align: right;
+  padding-right: 0;
+}
+
+/* ─── Flight Rows ───────────────────────────────────────── */
+.flight-row {
+  padding: 0 16px;
+  min-height: 46px;
+  border-bottom: 1px solid var(--border-base);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.12s;
+  position: relative;
+}
+
+.flight-row:last-child {
+  border-bottom: none;
+}
+
+.flight-row:hover {
+  background: var(--bg-row-hover);
+}
+
+.flight-row.editing {
+  background: var(--bg-editing);
+  border-left: 2px solid var(--accent-blue);
+}
+
+.flight-row > div {
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* ─── Cell Variants ─────────────────────────────────────── */
+.col-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.col-check input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent-blue);
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* ID */
+.text-secondary {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* AOC Badge */
+.badge-aoc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--accent-blue);
+  background: rgba(77,184,255,0.1);
+  border: 1px solid rgba(77,184,255,0.15);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+  letter-spacing: 0.06em;
+}
+
+/* Flight Number */
+.font-bold {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+}
+
+/* Time cells */
+.time-cell {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+}
+
+/* Days cell */
+.days-cell {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Date cells */
+.date-cell {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ─── Status Badge ──────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.15s, transform 0.12s;
+  user-select: none;
+  text-transform: uppercase;
+}
+
+.status-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge.active {
+  background: rgba(46,204,138,0.1);
+  color: var(--accent-green);
+  border: 1px solid rgba(46,204,138,0.2);
+}
+.status-badge.active::before {
+  background: var(--accent-green);
+}
+
+.status-badge.inactive {
+  background: rgba(255,90,90,0.1);
+  color: var(--accent-red);
+  border: 1px solid rgba(255,90,90,0.2);
+}
+.status-badge.inactive::before {
+  background: var(--accent-red);
+}
+
+.status-badge:hover {
+  opacity: 0.75;
+  transform: scale(0.97);
+}
+
+/* ─── Actions Cell ──────────────────────────────────────── */
+.actions-cell {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding-right: 0 !important;
+}
+
+/* Base button */
+.btn-edit,
+.btn-delete,
+.btn-save,
+.btn-cancel {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  height: 27px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-base);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.btn-edit {
+  background: transparent;
+  color: var(--accent-blue);
+  border-color: rgba(77,184,255,0.2);
+}
+.btn-edit:hover {
+  background: rgba(77,184,255,0.08);
+  border-color: rgba(77,184,255,0.4);
+}
+
+.btn-delete {
+  background: transparent;
+  color: var(--accent-red);
+  border-color: rgba(255,90,90,0.2);
+}
+.btn-delete:hover {
+  background: rgba(255,90,90,0.08);
+  border-color: rgba(255,90,90,0.4);
+}
+
+.btn-save {
+  background: var(--accent-blue);
+  color: #0a0a0c;
+  border-color: var(--accent-blue);
+  font-weight: 700;
+}
+.btn-save:hover:not(:disabled) {
+  background: #7aceff;
+}
+.btn-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-base);
+  padding: 4px 8px;
+}
+.btn-cancel:hover {
+  background: var(--bg-surface2);
+  color: var(--text-primary);
+}
+
+/* Error state */
+.save-error {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--accent-red);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Inline Edit Inputs ────────────────────────────────── */
+.flight-row input[type="text"],
+.flight-row input[type="date"],
+.flight-row input[type="time"],
+.flight-row select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  background: var(--bg-surface2);
+  border: 1px solid rgba(77,184,255,0.25);
+  border-radius: var(--radius-sm);
+  padding: 4px 6px;
+  outline: none;
+  width: 100%;
+  height: 27px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.flight-row input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+.flight-row input:focus,
+.flight-row select:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(77,184,255,0.12);
+}
+
+.flight-row select option {
+  background: #18181d;
+  color: var(--text-primary);
+}
+
+/* ─── Empty State ───────────────────────────────────────── */
+.no-data {
+  padding: 52px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Bulk Delete Bar ───────────────────────────────────── */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(245,158,11,0.06);
+  border-bottom: 1px solid rgba(245,158,11,0.15);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--accent-amber);
+}
+
+.bulk-bar .btn-bulk-delete {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  background: var(--accent-red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.bulk-bar .btn-bulk-delete:hover {
+  background: #e03c3c;
+}
+
+/* ─── Scrollbar Styling ─────────────────────────────────── */
+.flight-body::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.flight-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.flight-body::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+}
+.flight-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.15);
+}

@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# Flight Schedule Manager
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based internal tool for managing and visualizing flight schedules. Built for TelePort's Senior React Developer Take-Home Assessment.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✈️ Features
 
-### `npm start`
+- **Virtualized Table**: Handles 200+ flight records smoothly using `react-window`.
+- **Inline Editing**: Edit date, time, and status directly in the table with Save/Cancel, async simulation, and error handling.
+- **Status Toggle**: Instantly toggle flight status (Active/Inactive) with a switch.
+- **Bulk & Single Delete**: Select and delete one or multiple flights at once.
+- **Comprehensive Filters**: Filter by date range, days of operation, status, AOC, and body type. All filters combine with AND logic.
+- **Search**: Search by flight number, origin, or destination—works with all filters.
+- **Responsive Design**: Clean, modern UI with dark mode and mobile-friendly layout.
+- **Local State Only**: All data operations are performed client-side; no backend required.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v16+ recommended)
+- npm or yarn
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/YOUR_USERNAME/flight-schedule-manager.git
+cd flight-schedule-manager
+npm install
+# or
+yarn install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running the App
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+# or
+yarn start
+```
 
-### `npm run eject`
+The app will open at [http://localhost:3000](http://localhost:3000).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🗂️ Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+flight-schedule-manager/
+├── public/
+├── src/
+│   ├── components/
+│   │   └── FlightTable.js
+│   │   └── FlightTable.css
+│   ├── data/
+│   │   └── flights.json
+│   ├── App.js
+│   └── index.js
+└── package.json
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 📝 Assignment Coverage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [x] Virtualized table with `react-window`
+- [x] Inline editing with async save/cancel/error
+- [x] Status toggle (Active/Inactive)
+- [x] Single & bulk delete
+- [x] Filters: date range, days, status, AOC, body type (AND logic)
+- [x] Search (flight number, origin, destination)
+- [x] Clear all filters
+- [x] All data handled in local state
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 📦 Dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- React
+- react-window
+- (Optional) Material UI or your preferred component library
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🛠️ Customization
 
-### Making a Progressive Web App
+- Update `src/data/flights.json` to change the dataset.
+- Tweak styles in `FlightTable.css` for a different look.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+MIT
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 👤 Author
 
-### `npm run build` fails to minify
+- [Your Name](https://github.com/prabhleenGujral)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 💬 Feedback
+
+PRs and issues welcome!
