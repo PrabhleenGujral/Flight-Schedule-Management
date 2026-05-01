@@ -20,7 +20,7 @@ body {
 
 /* Breadcrumb */
 .app-breadcrumb {
-  font-family: "JetBrains Mono", monospace;
+  font-family: sans-serif;
   font-size: 12px;
   color: #5a5a6e;
   letter-spacing: 0.04em;
@@ -73,6 +73,7 @@ body {
   letter-spacing: -0.025em;
   color: #f0f0f4;
   margin-bottom: 8px;
+  font-family: sans-serif;
 }
 .app-title .accent {
   color: #4db8ff;
