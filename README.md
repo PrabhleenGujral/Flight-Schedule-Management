@@ -100,7 +100,7 @@ MIT
 
 ## 👤 Author
 
-- [Your Name](https://github.com/prabhleenGujral)
+- [Prabhleen Kaur Gujral](https://github.com/prabhleenGujral)
 
 ---
 
